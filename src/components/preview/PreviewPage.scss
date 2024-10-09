@@ -1,0 +1,74 @@
+.preview-page {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      .profile-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #007bff;
+        margin-bottom: 10px;
+        transition: transform 0.3s;
+      }
+  
+      .profile-name {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin: 5px 0;
+      }
+  
+      .profile-email {
+        font-size: 16px;
+        color: #777;
+        margin: 5px 0;
+      }
+  
+      .links-container {
+        margin-top: 15px;
+        width: 100%;
+  
+        .link-item {
+          display: inline-block;
+          margin: 5px 10px;
+          padding: 8px 12px;
+          background-color: #f0f0f0;
+          border-radius: 5px;
+          text-decoration: none;
+          color: #007bff;
+          font-weight: bold;
+          transition: background-color 0.3s, transform 0.3s;
+  
+          &:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+  
