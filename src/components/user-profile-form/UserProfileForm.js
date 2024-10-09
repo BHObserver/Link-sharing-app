@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './UserProfileForm.scss';
 
 const UserProfileForm = ({ setUserProfile }) => {
@@ -8,73 +8,121 @@ const UserProfileForm = ({ setUserProfile }) => {
     profilePicture: '',
     links: [{ platform: '', url: '' }],
   });
+  const [errors, setErrors] = useState({});
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const validateURL = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
   };
 
-  const handleLinkChange = (index, event) => {
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const handleLinkChange = useCallback((index, event) => {
     const { name, value } = event.target;
     const updatedLinks = formData.links.map((link, i) =>
       i === index ? { ...link, [name]: value } : link
     );
-    setFormData({ ...formData, links: updatedLinks });
-  };
+    setFormData((prev) => ({ ...prev, links: updatedLinks }));
+  }, [formData.links]);
 
-  const addLinkField = () => {
-    setFormData({ ...formData, links: [...formData.links, { platform: '', url: '' }] });
-  };
+  const addLinkField = useCallback(() => {
+    setFormData((prev) => ({
+      ...prev,
+      links: [...prev.links, { platform: '', url: '' }],
+    }));
+  }, []);
+
+  // New remove function for individual links
+  const removeLinkField = useCallback((index) => {
+    setFormData((prev) => ({
+      ...prev,
+      links: prev.links.filter((_, i) => i !== index),
+    }));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    if (!formData.name || !formData.email || !formData.profilePicture) {
-      alert('Please fill in all the required fields.');
-      return;
-    }
-  
-    if (!formData.email.includes('@')) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-  
+    const newErrors = {};
+
+    // Check required fields
+    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!validateEmail(formData.email)) newErrors.email = 'Invalid email';
+
+    if (!formData.profilePicture) newErrors.profilePicture = 'Profile picture URL is required';
+    else if (!validateURL(formData.profilePicture)) newErrors.profilePicture = 'Invalid URL';
+
+    formData.links.forEach((link, index) => {
+      if (!link.platform || !link.url) {
+        newErrors[`links_${index}`] = 'Both platform and URL are required';
+      } else if (!validateURL(link.url)) {
+        newErrors[`links_${index}`] = 'Invalid URL';
+      }
+    });
+
+    setErrors(newErrors);
+
+    // Stop submission if errors exist
+    if (Object.keys(newErrors).length > 0) return;
+
     setUserProfile(formData);
   };
-  
 
   return (
     <form className="user-profile-form" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label>Name:</label>
+        <label htmlFor="name">Name:</label>
         <input
           type="text"
           name="name"
+          id="name"
           value={formData.name}
           onChange={handleInputChange}
+          className={errors.name ? 'error' : ''}
           required
         />
+        {errors.name && <span className="error-message">{errors.name}</span>}
       </div>
 
       <div className="form-group">
-        <label>Email:</label>
+        <label htmlFor="email">Email:</label>
         <input
           type="email"
           name="email"
+          id="email"
           value={formData.email}
           onChange={handleInputChange}
+          className={errors.email ? 'error' : ''}
           required
         />
+        {errors.email && <span className="error-message">{errors.email}</span>}
       </div>
 
       <div className="form-group">
-        <label>Profile Picture URL:</label>
+        <label htmlFor="profilePicture">Profile Picture URL:</label>
         <input
           type="text"
           name="profilePicture"
+          id="profilePicture"
           value={formData.profilePicture}
           onChange={handleInputChange}
+          className={errors.profilePicture ? 'error' : ''}
+          required
         />
+        {errors.profilePicture && <span className="error-message">{errors.profilePicture}</span>}
+        {formData.profilePicture && validateURL(formData.profilePicture) && (
+          <div className="profile-picture-preview">
+            <img src={formData.profilePicture} alt="Profile Preview" />
+          </div>
+        )}
       </div>
 
       <div className="links-section">
@@ -87,6 +135,7 @@ const UserProfileForm = ({ setUserProfile }) => {
               placeholder="Platform (e.g., GitHub)"
               value={link.platform}
               onChange={(event) => handleLinkChange(index, event)}
+              className={errors[`links_${index}`] ? 'error' : ''}
               required
             />
             <input
@@ -95,8 +144,15 @@ const UserProfileForm = ({ setUserProfile }) => {
               placeholder="URL (e.g., https://github.com/username)"
               value={link.url}
               onChange={(event) => handleLinkChange(index, event)}
+              className={errors[`links_${index}`] ? 'error' : ''}
               required
             />
+            {errors[`links_${index}`] && <span className="error-message">{errors[`links_${index}`]}</span>}
+            
+            {/* Remove button for each link */}
+            <button type="button" onClick={() => removeLinkField(index)}>
+              Remove
+            </button>
           </div>
         ))}
         <button type="button" onClick={addLinkField}>Add Another Link</button>
