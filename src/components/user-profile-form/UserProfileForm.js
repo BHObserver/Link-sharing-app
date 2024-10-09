@@ -1,76 +1,109 @@
 import React, { useState } from 'react';
-import ProfileCard from '../profile-card/ProfileCard';
-import Input from '../input/Input';
-import Button from '../button/Button';
 import './UserProfileForm.scss';
 
-const UserProfileForm = () => {
-  // State to hold user data
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [links, setLinks] = useState([{ platform: 'GitHub', url: '' }]);
+const UserProfileForm = ({ setUserProfile }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    profilePicture: '',
+    links: [{ platform: '', url: '' }],
+  });
 
-  // Handle input change for form fields
-  const handleInputChange = (e, setter) => {
-    setter(e.target.value);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  // Handle link changes
-  const handleLinkChange = (index, value) => {
-    const updatedLinks = [...links];
-    updatedLinks[index].url = value;
-    setLinks(updatedLinks);
+  const handleLinkChange = (index, event) => {
+    const { name, value } = event.target;
+    const updatedLinks = formData.links.map((link, i) =>
+      i === index ? { ...link, [name]: value } : link
+    );
+    setFormData({ ...formData, links: updatedLinks });
   };
 
-  // Add a new link input
-  const addNewLink = () => {
-    setLinks([...links, { platform: 'New Platform', url: '' }]);
+  const addLinkField = () => {
+    setFormData({ ...formData, links: [...formData.links, { platform: '', url: '' }] });
   };
 
-  // Handle form submission
-  const handleFormSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('User Data:', { name, email, imageUrl, links });
-    // This is where we would handle the Firebase logic to save user data
+  
+    if (!formData.name || !formData.email || !formData.profilePicture) {
+      alert('Please fill in all the required fields.');
+      return;
+    }
+  
+    if (!formData.email.includes('@')) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+  
+    setUserProfile(formData);
   };
+  
 
   return (
-    <div className="user-profile-form">
-      <form onSubmit={handleFormSubmit}>
-        <Input
-          label="Name"
-          placeholder="Enter your name"
-          value={name}
-          onChange={(e) => handleInputChange(e, setName)}
+    <form className="user-profile-form" onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          required
         />
-        <Input
-          label="Email"
+      </div>
+
+      <div className="form-group">
+        <label>Email:</label>
+        <input
           type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => handleInputChange(e, setEmail)}
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          required
         />
-        <Input
-          label="Image URL"
-          placeholder="Enter image URL"
-          value={imageUrl}
-          onChange={(e) => handleInputChange(e, setImageUrl)}
+      </div>
+
+      <div className="form-group">
+        <label>Profile Picture URL:</label>
+        <input
+          type="text"
+          name="profilePicture"
+          value={formData.profilePicture}
+          onChange={handleInputChange}
         />
-        {links.map((link, index) => (
-          <Input
-            key={index}
-            label={`Link (${link.platform})`}
-            placeholder="Enter link URL"
-            value={link.url}
-            onChange={(e) => handleLinkChange(index, e.target.value)}
-          />
+      </div>
+
+      <div className="links-section">
+        <label>Links:</label>
+        {formData.links.map((link, index) => (
+          <div key={index} className="link-inputs">
+            <input
+              type="text"
+              name="platform"
+              placeholder="Platform (e.g., GitHub)"
+              value={link.platform}
+              onChange={(event) => handleLinkChange(index, event)}
+              required
+            />
+            <input
+              type="url"
+              name="url"
+              placeholder="URL (e.g., https://github.com/username)"
+              value={link.url}
+              onChange={(event) => handleLinkChange(index, event)}
+              required
+            />
+          </div>
         ))}
-        <Button onClick={addNewLink} type="button">Add Link</Button>
-        <Button type="submit">Save</Button>
-      </form>
-      <ProfileCard imageUrl={imageUrl} name={name} email={email} links={links} />
-    </div>
+        <button type="button" onClick={addLinkField}>Add Another Link</button>
+      </div>
+
+      <button type="submit" className="submit-button">Save Profile</button>
+    </form>
   );
 };
 
