@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.scss';
 import Header from './components/header/Header';
 import UserProfileForm from './components/user-profile-form/UserProfileForm';
@@ -13,9 +13,22 @@ function App() {
     links: [],
   });
 
-  const handleToggleView = () => {
-    setIsPreviewVisible(!isPreviewVisible);
-  };
+  // Persist user data to localStorage
+  useEffect(() => {
+    const storedProfile = localStorage.getItem('userProfile');
+    if (storedProfile) {
+      setUserProfile(JSON.parse(storedProfile));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+  }, [userProfile]);
+
+  // Toggle View
+  const handleToggleView = useCallback(() => {
+    setIsPreviewVisible((prev) => !prev);
+  }, []);
 
   return (
     <div className="App">
