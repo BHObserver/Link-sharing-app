@@ -1,165 +1,122 @@
-import React, { useState, useCallback } from 'react';
-import './UserProfileForm.scss';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const UserProfileForm = ({ setUserProfile }) => {
+import './UserProfileForm.scss';  // Make sure the SCSS file is linked correctly
+
+const UserProfileForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     profilePicture: '',
-    links: [{ platform: '', url: '' }],
   });
-  const [errors, setErrors] = useState({});
 
-  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
-  const validateURL = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (e) {
-      return false;
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev) => ({ ...prev, profilePicture: reader.result }));
+    };
+    if (file) {
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleLinkChange = useCallback((index, event) => {
-    const { name, value } = event.target;
-    const updatedLinks = formData.links.map((link, i) =>
-      i === index ? { ...link, [name]: value } : link
-    );
-    setFormData((prev) => ({ ...prev, links: updatedLinks }));
-  }, [formData.links]);
-
-  const addLinkField = useCallback(() => {
-    setFormData((prev) => ({
-      ...prev,
-      links: [...prev.links, { platform: '', url: '' }],
-    }));
-  }, []);
-
-  // New remove function for individual links
-  const removeLinkField = useCallback((index) => {
-    setFormData((prev) => ({
-      ...prev,
-      links: prev.links.filter((_, i) => i !== index),
-    }));
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = {};
-
-    // Check required fields
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!validateEmail(formData.email)) newErrors.email = 'Invalid email';
-
-    if (!formData.profilePicture) newErrors.profilePicture = 'Profile picture URL is required';
-    else if (!validateURL(formData.profilePicture)) newErrors.profilePicture = 'Invalid URL';
-
-    formData.links.forEach((link, index) => {
-      if (!link.platform || !link.url) {
-        newErrors[`links_${index}`] = 'Both platform and URL are required';
-      } else if (!validateURL(link.url)) {
-        newErrors[`links_${index}`] = 'Invalid URL';
-      }
-    });
-
-    setErrors(newErrors);
-
-    // Stop submission if errors exist
-    if (Object.keys(newErrors).length > 0) return;
-
-    setUserProfile(formData);
+    // Add any form validation or submission logic here
   };
 
   return (
+    <div className='user-profile-form-container'>
+        <div>
+        <h1>Profile Details</h1>
+        <p>Add your details to create a personal touch to your profile.</p>
+      </div>
     <form className="user-profile-form" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          className={errors.name ? 'error' : ''}
-          required
-        />
-        {errors.name && <span className="error-message">{errors.name}</span>}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className={errors.email ? 'error' : ''}
-          required
-        />
-        {errors.email && <span className="error-message">{errors.email}</span>}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="profilePicture">Profile Picture URL:</label>
-        <input
-          type="text"
-          name="profilePicture"
-          id="profilePicture"
-          value={formData.profilePicture}
-          onChange={handleInputChange}
-          className={errors.profilePicture ? 'error' : ''}
-          required
-        />
-        {errors.profilePicture && <span className="error-message">{errors.profilePicture}</span>}
-        {formData.profilePicture && validateURL(formData.profilePicture) && (
-          <div className="profile-picture-preview">
-            <img src={formData.profilePicture} alt="Profile Preview" />
+        <div className="form-group profile-picture-section">
+          <div className='profile-picture-container'>
+          <span className='prof-label'>Profile Picture</span>
+            <div className='prof-label-input'>
+                <label htmlFor="profilePicture" className="profile-picture-label">
+                  {formData.profilePicture ? (
+                    <img src={formData.profilePicture} alt="Profile Preview" className="profile-picture" />
+                  ) : (
+                    <div className="profile-picture-placeholder">Change Image</div>
+                  )}
+                </label>
+                <input
+                  type="file"
+                  id="profilePicture"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                  hidden
+                />
+                <p className="image-requirements">
+                  Image must be below 1024x1024px. Use PNG, JPG, or BMP format.
+                </p>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
 
-      <div className="links-section">
-        <label>Links:</label>
-        {formData.links.map((link, index) => (
-          <div key={index} className="link-inputs">
-            <input
-              type="text"
-              name="platform"
-              placeholder="Platform (e.g., GitHub)"
-              value={link.platform}
-              onChange={(event) => handleLinkChange(index, event)}
-              className={errors[`links_${index}`] ? 'error' : ''}
-              required
-            />
-            <input
-              type="url"
-              name="url"
-              placeholder="URL (e.g., https://github.com/username)"
-              value={link.url}
-              onChange={(event) => handleLinkChange(index, event)}
-              className={errors[`links_${index}`] ? 'error' : ''}
-              required
-            />
-            {errors[`links_${index}`] && <span className="error-message">{errors[`links_${index}`]}</span>}
-            
-            {/* Remove button for each link */}
-            <button type="button" onClick={() => removeLinkField(index)}>
-              Remove
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={addLinkField}>Add Another Link</button>
-      </div>
+      <div className='form-inputs'>
+        <div className="form-group">
+          <label htmlFor="firstName">First name*</label>
+          <input
+            type="text"
+            name="firstName"
+            id="firstName"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
 
-      <button type="submit" className="submit-button">Save Profile</button>
+        <div className="form-group">
+          <label htmlFor="lastName">Last name*</label>
+          <input
+            type="text"
+            name="lastName"
+            id="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+        </div>    
+      </div>
+        <div className="save-notification">
+          Your changes have been successfully saved!
+        </div>
     </form>
+      <div className='save-button-container'>
+        <button type="submit" className="save-button">
+          Save
+        </button>
+      </div>
+
+  </div>
+
+    
   );
 };
 
