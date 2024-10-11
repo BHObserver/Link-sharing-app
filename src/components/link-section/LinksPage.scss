@@ -1,6 +1,6 @@
 .links-page {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 30px auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
@@ -147,6 +147,7 @@ p {
 .save-button-container {
   display: flex;
   justify-content: right;
+  margin-top: 20px
 }
 
 .save-button {
