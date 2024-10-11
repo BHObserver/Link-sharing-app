@@ -1,48 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import './App.scss';
-import Header from './components/header/Header';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserProfileForm from './components/user-profile-form/UserProfileForm';
-import PreviewPage from './components/preview/PreviewPage';
+import LinksPage from './components/link-section/LinkSection';
+import Header from './components/header/Header'; // Import the Header component
 
-function App() {
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-  const [userProfile, setUserProfile] = useState({
-    name: '',
-    email: '',
-    profilePicture: '',
-    links: [],
-  });
-
-  // Persist user data to localStorage
-  useEffect(() => {
-    const storedProfile = localStorage.getItem('userProfile');
-    if (storedProfile) {
-      setUserProfile(JSON.parse(storedProfile));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('userProfile', JSON.stringify(userProfile));
-  }, [userProfile]);
-
-  // Toggle View
-  const handleToggleView = useCallback(() => {
-    setIsPreviewVisible((prev) => !prev);
-  }, []);
-
+const App = () => {
   return (
-    <div className="App">
-      <Header />
-      <button className="toggle-button" onClick={handleToggleView}>
-        {isPreviewVisible ? 'Edit Profile' : 'View Preview'}
-      </button>
-      {isPreviewVisible ? (
-        <PreviewPage userProfile={userProfile} />
-      ) : (
-        <UserProfileForm setUserProfile={setUserProfile} />
-      )}
-    </div>
+    <Router>
+      <Header />  {/* Add the Header so it appears on all pages */}
+      <div>
+        <Routes>
+          {/* Define a route for the profile form */}
+          <Route path="/" element={<UserProfileForm />} />
+
+          {/* Define a route for the links section */}
+          <Route path="/links" element={<LinksPage />} />
+
+          {/* If you have a preview page, add it here */}
+          {/* <Route path="/preview" element={<PreviewPage />} /> */}
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
