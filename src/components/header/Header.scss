@@ -7,9 +7,16 @@
   border-bottom: 1px solid #e5e5e9;
 
   &__logo {
+    display: flex;
+    align-items: center;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #6b47dc; /* Purple color for the logo */
+
+    img {
+      width: 40px; /* Adjust size of the logo image */
+      height: 40px;
+      margin-right: 12px; /* Add space between logo and text */
+    }
   }
 
   &__nav {
@@ -25,6 +32,10 @@
 
       &:hover {
         color: #6b47dc; /* Hover effect with purple color */
+      }
+
+      &:last-child {
+        margin-right: 0; /* Remove margin for the last link */
       }
     }
 
