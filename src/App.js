@@ -1,27 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserProfileForm from './components/user-profile-form/UserProfileForm';
 import LinksPage from './components/link-section/LinkSection';
 import Header from './components/header/Header';
-import MainComponent from './components/main-component/MainComponent'; // Import the new MainComponent
+import PreviewPage from './components/preview/PreviewPage';
 
 const App = () => {
+  // Shared state for profile and links
+  const [userProfile, setUserProfile] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    profilePicture: '',
+    links: [],
+  });
+
+  // Handlers to update the profile and links state
+  const handleProfileChange = (updatedProfile) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      ...updatedProfile,
+    }));
+  };
+
+  const handleLinksChange = (updatedLinks) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      links: updatedLinks,
+    }));
+  };
+
   return (
     <Router>
-      <Header />  {/* Add the Header so it appears on all pages */}
+      <Header /> {/* Header stays across all pages */}
       <div>
         <Routes>
-          {/* Define a route for the MainComponent */}
-          <Route path="/" element={<MainComponent />} /> 
-
-          {/* Define a route for the profile form */}
-          <Route path="/profile" element={<UserProfileForm />} />
-
-          {/* Define a route for the links section */}
-          <Route path="/links" element={<LinksPage />} />
-
-          {/* You can define a route for the preview section here */}
-          {/* <Route path="/preview" element={<PreviewPage />} /> */}
+          <Route 
+            path="/" 
+            element={<UserProfileForm userProfile={userProfile} onProfileChange={handleProfileChange} />} 
+          />
+          <Route 
+            path="/links" 
+            element={<LinksPage links={userProfile.links} onLinksChange={handleLinksChange} />} 
+          />
+          <Route 
+            path="/preview" 
+            element={<PreviewPage userProfile={userProfile} />} 
+          />
         </Routes>
       </div>
     </Router>

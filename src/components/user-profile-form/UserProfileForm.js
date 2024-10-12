@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './UserProfileForm.scss'; // Ensure SCSS file is linked correctly
+import PreviewPage from '../preview/PreviewPage'; // Import PreviewPage component
 
 const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
   const [formData, setFormData] = useState({
@@ -114,6 +115,12 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
           Your changes have been successfully saved!
         </div>
       </form>
+
+      {/* Live Preview Section */}
+      <div className="live-preview-section">
+        <h2>Live Profile Preview</h2>
+        <PreviewPage userProfile={formData} />
+      </div>
     </div>
   );
 };
