@@ -32,13 +32,18 @@ const PreviewPage = ({ userProfile }) => {
   return (
     <div className="preview-page">
       <div className="profile-card">
-        <img
-          src={userProfile.profilePicture}
-          alt="Profile"
-          className="profile-image"
-        />
-        <h2 className="profile-name">{userProfile.name}</h2>
-        <p className="profile-email">{userProfile.email}</p>
+        <div className='profile-image-container'>
+          <img
+              src={userProfile.profilePicture}
+              alt="Profile"
+              className="profile-image"
+          />
+        </div>
+        
+        <div className='profile-details'>
+          <h2 className="profile-name">{userProfile.name}</h2>
+          <p className="profile-email">{userProfile.email}</p>  
+        </div>
 
         <div className="links-container">
           {userProfile.links.map((link, index) => (
