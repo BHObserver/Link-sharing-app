@@ -1,45 +1,41 @@
 import React, { useState } from 'react';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
-import { useNavigate } from 'react-router-dom';
 import StrictModeDroppable from '../StrictModeDropable/StrictModeDropable';
 import './LinksPage.scss'; // Ensure SCSS file is correct
 
+const platformOptions = ['GitHub', 'YouTube', 'Twitter', 'LinkedIn', 'Instagram'];
 
+const LinksPage = ({ links = [], onLinksChange = () => {} }) => {
+  const [currentLinks, setCurrentLinks] = useState(links);
 
-const platformOptions = [`${<></>}GitHub`, 'YouTube', 'Twitter', 'LinkedIn', 'Instagram'];
-
-const LinksPage = () => {
-  const [links, setLinks] = useState([{ platform: '', url: '' }]);
-  const navigate = useNavigate();
-
-  // Function to handle link input changes
   const handleLinkChange = (index, event) => {
     const { name, value } = event.target;
-    const updatedLinks = links.map((link, i) =>
+    const updatedLinks = currentLinks.map((link, i) =>
       i === index ? { ...link, [name]: value } : link
     );
-    setLinks(updatedLinks);
+    setCurrentLinks(updatedLinks);
+    onLinksChange(updatedLinks); // Call the parent handler
   };
 
-  // Add new link field
   const addLinkField = () => {
-    setLinks([...links, { platform: '', url: '' }]);
+    const newLinks = [...currentLinks, { platform: '', url: '' }];
+    setCurrentLinks(newLinks);
+    onLinksChange(newLinks); // Update parent
   };
 
-  // Remove a link
   const removeLinkField = (index) => {
-    setLinks(links.filter((_, i) => i !== index));
+    const updatedLinks = currentLinks.filter((_, i) => i !== index);
+    setCurrentLinks(updatedLinks);
+    onLinksChange(updatedLinks); // Update parent
   };
 
-  // Handle reordering after drag
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
-
-    const reorderedLinks = Array.from(links);
+    const reorderedLinks = Array.from(currentLinks);
     const [movedLink] = reorderedLinks.splice(result.source.index, 1);
     reorderedLinks.splice(result.destination.index, 0, movedLink);
-
-    setLinks(reorderedLinks);
+    setCurrentLinks(reorderedLinks);
+    onLinksChange(reorderedLinks); // Update parent on drag end
   };
 
   return (
@@ -51,17 +47,11 @@ const LinksPage = () => {
         + Add new link
       </button>
 
-      {/* Drag and Drop Context */}
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        {/* Replaced Droppable with StrictModeDroppable */}
         <StrictModeDroppable droppableId="links">
           {(provided) => (
-            <div
-              className="links-container"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {links.map((link, index) => (
+            <div className="links-container" {...provided.droppableProps} ref={provided.innerRef}>
+              {Array.isArray(currentLinks) && currentLinks.map((link, index) => (
                 <Draggable key={`link-${index}`} draggableId={`link-${index}`} index={index}>
                   {(provided) => (
                     <div
@@ -116,11 +106,12 @@ const LinksPage = () => {
           )}
         </StrictModeDroppable>
       </DragDropContext>
-          <div className='save-button-container'>
-            <button type="button" className="save-button" onClick={() => navigate('/')}>
-              Save
-            </button>
-          </div>
+
+      <div className='save-button-container'>
+        <button type="button" className="save-button" onClick={() => console.log('Links saved:', currentLinks)}>
+          Save
+        </button>
+      </div>
     </div>
   );
 };
