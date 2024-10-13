@@ -6,7 +6,6 @@
    <img src="./src/assets/logo-head.png" alt="logo" width="140" height="auto" />
    <br/>
 
- 
    <h3><b>Link Sharing App</b></h3>
 
  </div>
