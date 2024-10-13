@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import './UserProfileForm.scss'; // Ensure SCSS file is linked correctly
-import PreviewPage from '../preview/PreviewPage'; // Import PreviewPage component
+import { useNavigate } from 'react-router-dom';
+import './UserProfileForm.scss';
+import PreviewPage from '../preview/PreviewPage';
 
 const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
   const [formData, setFormData] = useState({
@@ -9,11 +10,13 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
     email: userProfile.email || '',
     profilePicture: userProfile.profilePicture || '',
   });
+  const [isSaved, setIsSaved] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    onProfileChange({ ...formData, [name]: value }); // Call the parent handler
+    onProfileChange({ ...formData, [name]: value });
   };
 
   const handleProfilePictureChange = (e) => {
@@ -21,7 +24,7 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       setFormData((prev) => ({ ...prev, profilePicture: reader.result }));
-      onProfileChange({ ...formData, profilePicture: reader.result }); // Update profile picture
+      onProfileChange({ ...formData, profilePicture: reader.result });
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -30,22 +33,29 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add any form validation or submission logic here
     console.log('Form data submitted:', formData);
+
+    // Show notification
+    setIsSaved(true);
+
+    // Navigate to the links page after 2 seconds
+    setTimeout(() => {
+      navigate('/links');
+    }, 2000);
   };
 
   return (
-    <div className='container'>
-        <div className='user-profile-form-container'>
+    <div className="container">
+      <div className="user-profile-form-container">
         <div>
           <h1>Profile Details</h1>
           <p>Add your details to create a personal touch to your profile.</p>
         </div>
         <form className="user-profile-form" onSubmit={handleSubmit}>
           <div className="form-group profile-picture-section">
-            <div className='profile-picture-container'>
-              <span className='prof-label'>Profile Picture</span>
-              <div className='prof-label-input'>
+            <div className="profile-picture-container">
+              <span className="prof-label">Profile Picture</span>
+              <div className="prof-label-input">
                 <label htmlFor="profilePicture" className="profile-picture-label">
                   {formData.profilePicture ? (
                     <img src={formData.profilePicture} alt="Profile Preview" className="profile-picture" />
@@ -68,7 +78,7 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
             </div>
           </div>
 
-          <div className='form-inputs'>
+          <div className="form-inputs">
             <div className="form-group">
               <label htmlFor="firstName">First name*</label>
               <input
@@ -111,13 +121,14 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
               Save
             </button>
           </div>
-          
-          <div className="save-notification">
+
+          {/* Show the notification if form is saved */}
+          <div className={`save-notification ${isSaved ? 'visible' : ''}`}>
             Your changes have been successfully saved!
           </div>
         </form>
       </div>
-      
+
       {/* Live Preview Section */}
       <div className="live-preview-section">
         <PreviewPage userProfile={formData} />

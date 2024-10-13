@@ -1,3 +1,4 @@
+/* Main container */
 .container {
   display: flex;
   flex-direction: row-reverse;
@@ -6,162 +7,187 @@
   margin-top: 40px;
 }
 
+/* For mobile and tablet screens, stack the form and preview vertically */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* User Profile Form Container */
 .user-profile-form-container {
   max-width: 600px;
-  height: 765px;
-  color: #707070;;
+  height: 690px;
+  color: #000;
   background: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px 30px;
   border-radius: 10px;
+  margin: 20px;
 }
 
+/* Responsive adjustments for the form layout */
 .user-profile-form {
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   border-radius: 8px;
-  
-  h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
+}
 
-  p {
-    color: #6b7280;
-    margin-bottom: 20px;
-  }
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 
-  .form-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-
-    label {
-      font-size: 14px;
-      display: block;
-    }
-
-    input {
-      width: 60%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 5px;
-      font-size: 16px;
-      margin-top: 8px;
-    }
-  }
-
-  .profile-picture-section {
-    text-align: center;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px 15px;
-    background: #FAFAFA;
-
-    .profile-picture-container {
-      display: flex;
-      width: 100%;
-      gap: 10%;
-      align-items: center;
-    }
-
-    .prof-label-input {
-      display: flex;
-      gap: 5%;
-      align-items: center;
-    }
-
-    .prof-label {
-      font-size: 14px;
-      text-align: left;
-      width: 30%;
-    }
-
-    .profile-picture-placeholder {
-      width: 150px;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 14px;
-      color: #6b7280;
-      cursor: pointer;
-    }
-
-    .profile-picture {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 15px;
-      border: 2px solid #d1d5db;
-      cursor: pointer;
-    }
-
-    .profile-picture-placeholder:hover {
-      background-image: url("../../assets/photo.png");
-      background-size: 60px 60px;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-color: #000002;
-
-    }
-    
-    .profile-picture:hover {
-      background-image: url("../../assets/photo.png");
-      background-size: 60px 60px;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-color: #000002;
-
-    }
-
-    .image-requirements {
-      width: 55%;
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 8px;
-      text-align: left;
-    }
-  }
-
-  .form-inputs {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    background: #FAFAFA;
-  }
-
-  .save-button-container {
-    display: flex;
-    justify-content: right;
-    margin-top: 20px !important;
-  }
-
-  .save-button {
-    background-color: #5a67d8;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 15%;
-    font-size: 16px;
-    margin-bottom: 10px;
-
-    &:hover {
-      background-color: #434190;
-    }
-  }
-
-  .save-notification {
-    text-align: center;
+  /* Label and input adjustments for small screens */
+  label {
     font-size: 14px;
-    color: #10b981;
-    background-color: #f0fdf4;
-    padding: 10px;
+    display: block;
+  }
+
+  input {
+    width: 60%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
     border-radius: 5px;
-    display: none; /* You can toggle this in the state to show on successful save */
+    font-size: 16px;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .user-profile-form-container {
+    height: auto;
+  }
+  /* Ensure input fields take up full width on mobile */
+  .form-group input {
+    width: 50%;
+    height: 4px;
+  }
+  .profile-picture-container {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;
+    gap: 15px; /* Increase the gap between elements */
+  }
+
+  /* Adjustments for the profile picture */
+  .profile-picture-placeholder, .profile-picture {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Profile Picture Section */
+.profile-picture-section {
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  background: #fafafa;
+
+  .profile-picture-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10%;
+    align-items: center;
+  }
+
+  .prof-label-input {
+    display: flex;
+    gap: 5%;
+    align-items: center;
+  }
+
+  .prof-label {
+    font-size: 14px;
+    text-align: left;
+    width: 30%;
+  }
+
+  .profile-picture-placeholder, .profile-picture {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 2px solid #d1d5db;
+    cursor: pointer;
+  }
+
+  .image-requirements {
+    width: 55%;
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 8px;
+    text-align: left;
+  }
+}
+
+/* Form Inputs Section */
+.form-inputs {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background: #fafafa;
+}
+
+/* Save button and notification */
+.save-button-container {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px !important;
+}
+
+.save-button {
+  background-color: #5a67d8;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 20%;
+  font-size: 16px;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-color: #434190;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Ensure the save button takes full width on mobile */
+  .save-button {
+    width: 100%;
+  }
+}
+
+/* Notification styling */
+.save-notification {
+  text-align: center;
+  font-size: 14px;
+  color: #10b981;
+  background-color: #f0fdf4;
+  padding: 10px;
+  border-radius: 5px;
+  transition: opacity 0.3s ease-in-out; /* Smooth transition */
+  opacity: 0; /* Initially hidden */
+}
+
+.save-notification.visible {
+  opacity: 1; /* Show the notification when visible */
+}
+
+/* Live Preview Section */
+.live-preview-section {
+  max-width: 600px;
+  height: auto; /* Make height auto for better mobile adaptation */
+}
+
+@media (max-width: 768px) {
+  .live-preview-section {
+    width: 100%;
+    margin-top: 20px; /* Add some space between the form and preview */
   }
 }

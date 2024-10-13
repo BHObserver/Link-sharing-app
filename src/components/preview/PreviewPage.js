@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaYoutube, FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaYoutube, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa';
 import './PreviewPage.scss';
 
 const PreviewPage = ({ userProfile = {} }) => {
@@ -14,6 +14,10 @@ const PreviewPage = ({ userProfile = {} }) => {
         return <FaYoutube />;
       case 'linkedin':
         return <FaLinkedin />;
+      case 'instagram':
+        return <FaInstagram />;
+      case 'twitter':
+        return <FaTwitter />;
       default:
         return null;
     }
@@ -27,6 +31,10 @@ const PreviewPage = ({ userProfile = {} }) => {
         return 'link-item youtube';
       case 'linkedin':
         return 'link-item linkedin';
+      case 'instagram':
+        return 'link-item instagram';
+      case 'twitter':
+        return 'link-item twitter';
       default:
         return 'link-item';
     }

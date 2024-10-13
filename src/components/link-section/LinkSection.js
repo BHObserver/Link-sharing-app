@@ -1,33 +1,54 @@
 import React, { useState } from 'react';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import StrictModeDroppable from '../StrictModeDropable/StrictModeDropable';
-import PreviewPage from '../preview/PreviewPage'; // Import PreviewPage for live preview
+import Select from 'react-select';
+import { FaGithub, FaYoutube, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
+import PreviewPage from '../preview/PreviewPage';
+
 import './LinksPage.scss'; // Ensure SCSS file is correct
 
-const platformOptions = ['GitHub', 'YouTube', 'Twitter', 'LinkedIn', 'Instagram'];
+// Create an array of options with icons and labels
+const platformOptions = [
+  { value: 'GitHub', label: <><FaGithub /> GitHub</> },
+  { value: 'YouTube', label: <><FaYoutube /> YouTube</> },
+  { value: 'LinkedIn', label: <><FaLinkedin /> LinkedIn</> },
+  { value: 'Instagram', label: <><FaInstagram /> Instagram</> }, 
+  { value: 'Twitter', label: <><FaTwitter /> Twitter</> }
+];
 
 const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
   const [currentLinks, setCurrentLinks] = useState(links);
+  const navigate = useNavigate(); // Initialize navigate
 
-  const handleLinkChange = (index, event) => {
-    const { name, value } = event.target;
+  // Handle platform selection change
+  const handlePlatformChange = (index, selectedOption) => {
     const updatedLinks = currentLinks.map((link, i) =>
-      i === index ? { ...link, [name]: value } : link
+      i === index ? { ...link, platform: selectedOption ? selectedOption.value : '' } : link
     );
     setCurrentLinks(updatedLinks);
-    onLinksChange(updatedLinks); // Call the parent handler
+    onLinksChange(updatedLinks);
+  };
+
+  // Handle URL input change
+  const handleUrlChange = (index, event) => {
+    const updatedLinks = currentLinks.map((link, i) =>
+      i === index ? { ...link, url: event.target.value } : link
+    );
+    setCurrentLinks(updatedLinks);
+    onLinksChange(updatedLinks);
   };
 
   const addLinkField = () => {
     const newLinks = [...currentLinks, { platform: '', url: '' }];
     setCurrentLinks(newLinks);
-    onLinksChange(newLinks); // Update parent
+    onLinksChange(newLinks);
   };
 
   const removeLinkField = (index) => {
     const updatedLinks = currentLinks.filter((_, i) => i !== index);
     setCurrentLinks(updatedLinks);
-    onLinksChange(updatedLinks); // Update parent
+    onLinksChange(updatedLinks);
   };
 
   const handleOnDragEnd = (result) => {
@@ -36,12 +57,18 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
     const [movedLink] = reorderedLinks.splice(result.source.index, 1);
     reorderedLinks.splice(result.destination.index, 0, movedLink);
     setCurrentLinks(reorderedLinks);
-    onLinksChange(reorderedLinks); // Update parent on drag end
+    onLinksChange(reorderedLinks);
+  };
+
+  // Handle save and redirect to /preview
+  const handleSave = () => {
+    console.log('Links saved:', currentLinks);
+    // After saving, navigate to the preview page
+    navigate('/preview');
   };
 
   return (
     <div className="links-page-container">
-      {/* Links Editing Section */}
       <div className="links-editor">
         <h1>Customize your links</h1>
         <p>Add/edit/remove links below and then share all your profiles with the world!</p>
@@ -54,56 +81,51 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
           <StrictModeDroppable droppableId="links">
             {(provided) => (
               <div className="links-container" {...provided.droppableProps} ref={provided.innerRef}>
-                {Array.isArray(currentLinks) && currentLinks.map((link, index) => (
-                  <Draggable key={`link-${index}`} draggableId={`link-${index}`} index={index}>
-                    {(provided) => (
-                      <div
-                        className="link-card"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <div className="link-header">
-                          <span>= Link #{index + 1}</span>
-                          <button
-                            type="button"
-                            className="remove-button"
-                            onClick={() => removeLinkField(index)}
-                          >
-                            Remove
-                          </button>
-                        </div>
+                {Array.isArray(currentLinks) &&
+                  currentLinks.map((link, index) => (
+                    <Draggable key={`link-${index}`} draggableId={`link-${index}`} index={index}>
+                      {(provided) => (
+                        <div
+                          className="link-card"
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <div className="link-header">
+                            <span>Link #{index + 1}</span>
+                            <button
+                              type="button"
+                              className="remove-button"
+                              onClick={() => removeLinkField(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
 
-                        <div className="link-inputs">
-                          <label htmlFor={`platform-${index}`}>Platform</label>
-                          <select
-                            name="platform"
-                            value={link.platform}
-                            onChange={(event) => handleLinkChange(index, event)}
-                            required
-                          >
-                            <option value="">Select Platform</option>
-                            {platformOptions.map((option, i) => (
-                              <option key={i} value={option}>
-                                {option}
-                              </option>
-                            ))}
-                          </select>
+                          <div className="link-inputs">
+                            <label htmlFor={`platform-${index}`}>Platform</label>
+                            <Select
+                              options={platformOptions}
+                              value={platformOptions.find(option => option.value === link.platform)}
+                              onChange={(selectedOption) => handlePlatformChange(index, selectedOption)}
+                              placeholder="Select Platform"
+                              isClearable
+                            />
 
-                          <label htmlFor={`url-${index}`}>Link</label>
-                          <input
-                            type="url"
-                            name="url"
-                            placeholder="https://example.com"
-                            value={link.url}
-                            onChange={(event) => handleLinkChange(index, event)}
-                            required
-                          />
+                            <label htmlFor={`url-${index}`}>Link</label>
+                            <input
+                              type="url"
+                              name="url"
+                              placeholder="https://example.com"
+                              value={link.url}
+                              onChange={(event) => handleUrlChange(index, event)}
+                              required
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                      )}
+                    </Draggable>
+                  ))}
                 {provided.placeholder}
               </div>
             )}
@@ -111,15 +133,13 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
         </DragDropContext>
 
         <div className="save-button-container">
-          <button type="button" className="save-button" onClick={() => console.log('Links saved:', currentLinks)}>
+          <button type="button" className="save-button" onClick={handleSave}>
             Save
           </button>
         </div>
       </div>
 
-      {/* Live Preview Section */}
       <div className="live-preview-section">
-        {/* Merge links into userProfile and pass to PreviewPage */}
         <PreviewPage userProfile={{ ...userProfile, links: currentLinks }} />
       </div>
     </div>

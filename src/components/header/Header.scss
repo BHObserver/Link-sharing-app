@@ -3,7 +3,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 32px;
-  background-color: #f9f9fb;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 25px;
   border-bottom: 1px solid #e5e5e9;
 
   &__logo {
@@ -13,46 +15,81 @@
     font-weight: 600;
 
     img {
-      width: 40px; /* Adjust size of the logo image */
+      width: 40px;
       height: 40px;
-      margin-right: 12px; /* Add space between logo and text */
+      margin-right: 12px;
     }
   }
 
   &__nav {
     display: flex;
     align-items: center;
-    
-    .header__link {
+
+    .header__link, .header__button {
       font-size: 1rem;
-      color: #828282; /* Grey color for the links */
+      color: #828282;
+      padding: 10px;
+      border-radius: 5px;
       text-decoration: none;
       margin-right: 20px;
-      transition: color 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 
       &:hover {
-        color: #6b47dc; /* Hover effect with purple color */
+        color: #6b47dc;
+      }
+
+      &.active {
+        background-color: #efecff;
+        color: #6b47dc;
       }
 
       &:last-child {
-        margin-right: 0; /* Remove margin for the last link */
+        margin-right: 0;
+      }
+
+      .header__icon {
+        margin-right: 8px;
+      }
+
+      .header__text {
+        display: inline-block;
       }
     }
 
     .header__button {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #6b47dc; /* Purple text for the button */
+      border: 1px solid #6b47dc;
       background-color: transparent;
-      border: 1px solid #6b47dc; /* Border for the button */
       border-radius: 8px;
       padding: 8px 16px;
-      text-decoration: none;
       transition: background-color 0.2s ease-in-out;
 
       &:hover {
-        background-color: #f0e9ff; /* Light purple background on hover */
+        background-color: #f0e9ff;
       }
     }
   }
+}
+
+/* Media Query for screens 768px or less */
+@media screen and (max-width: 768px) {
+  
+  .header, .header__nav {
+    margin: 0;
+
+    .header__text {
+      display: none !important;
+    }
+
+    .header__icon {
+      margin-right: 0 !important;
+    }
+  }
+
+  .header {
+    margin: 20px 10px;
+  }
+
+
 }
