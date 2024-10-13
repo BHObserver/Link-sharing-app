@@ -119,7 +119,6 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
 
       {/* Live Preview Section */}
       <div className="live-preview-section">
-        <h2>Live Profile & Links Preview</h2>
         {/* Merge links into userProfile and pass to PreviewPage */}
         <PreviewPage userProfile={{ ...userProfile, links: currentLinks }} />
       </div>

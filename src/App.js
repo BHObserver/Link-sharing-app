@@ -5,6 +5,8 @@ import LinksPage from './components/link-section/LinkSection';
 import Header from './components/header/Header';
 import PreviewPage from './components/preview/PreviewPage';
 
+import './App.scss'
+
 const App = () => {
   // Shared state for profile and links
   const [userProfile, setUserProfile] = useState({
