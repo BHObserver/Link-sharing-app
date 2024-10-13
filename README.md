@@ -22,7 +22,7 @@
    - [Prerequisites](#prerequisites)
    - [Deployment](#deployment)
  - [👥 Authors](#authors)
- - [🔭 Future Features](#future-features)
+ - [🔭 Upcoming Features](#future-features)
  - [🤝 Contributing](#contributing)
  - [⭐️ Show Your Support](#support)
  - [🙏 Acknowledgements](#acknowledgements)
@@ -86,11 +86,11 @@
 
  - GitHub: [@BHObserver](https://github.com/BHObserver)
  - Twitter: [@BurhanU14173360](https://twitter.com/BurhanU14173360)
- - LinkedIn: [bhobserver](https://www.linkedin.com/in/hans-dev)
+ - LinkedIn: [hans-dev](https://www.linkedin.com/in/hans-dev)
 
  <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
- ## 🔭 Future Features <a name="future-features"></a>
+ ## 🔭 Upcoming Features <a name="future-features"></a>
 
  - [ ] **User Authentication**: Implement robust signup and signin features for enhanced security.
  - [ ] **Database Integration**: Store user data in a database for persistent access and management.
