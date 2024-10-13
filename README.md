@@ -50,7 +50,7 @@
  
  ### 🚀 Live Demo
 
- > Experience the power of devlinks in action! Watch the [live demo](#) of the app or visit the app [page](#) to explore its features.
+ > Experience the power of devlinks in action! Watch the [live demo]() of the app to explore its features.
 
  <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -87,7 +87,7 @@
 
  - GitHub: [@BHObserver](https://github.com/BHObserver)
  - Twitter: [@BurhanU14173360](https://twitter.com/BurhanU14173360)
- - LinkedIn: [bhobserver](https://www.linkedin.com/in/hans.dev)
+ - LinkedIn: [bhobserver](https://www.linkedin.com/in/hans-dev)
 
  <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
