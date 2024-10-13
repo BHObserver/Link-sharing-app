@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserProfileForm from './components/user-profile-form/UserProfileForm';
-import LinksPage from './components/link-section/LinkSection';
+import LinksPage from './components/link-page/LinkPage';
 import Header from './components/header/Header';
 import PreviewPage from './components/preview/PreviewPage';
 

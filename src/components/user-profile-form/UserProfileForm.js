@@ -1,47 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import './UserProfileForm.scss';
 import PreviewPage from '../preview/PreviewPage';
 
 const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
-  const [formData, setFormData] = useState({
-    firstName: userProfile.firstName || '',
-    lastName: userProfile.lastName || '',
-    email: userProfile.email || '',
-    profilePicture: userProfile.profilePicture || '',
-  });
   const [isSaved, setIsSaved] = useState(false);
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    onProfileChange({ ...formData, [name]: value });
-  };
+  // Load data from localStorage when the component mounts
+  useEffect(() => {
+    const savedData = localStorage.getItem('userProfile');
+    if (savedData) {
+      formik.setValues(JSON.parse(savedData));
+    }
+  }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: userProfile.firstName || '',
+      lastName: userProfile.lastName || '',
+      email: userProfile.email || '',
+      profilePicture: userProfile.profilePicture || '',
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string()
+        .max(15, 'First name must be 15 characters or less')
+        .required('First name is required'),
+      lastName: Yup.string()
+        .max(20, 'Last name must be 20 characters or less')
+        .required('Last name is required'),
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      /* profilePicture: Yup.mixed().test(
+        'fileSize',
+        'Image must be below 1024x1024px',
+        (value) => !value || (value && value.size <= 1024 * 1024)
+      ), */
+    }),
+    onSubmit: (values) => {
+      console.log('Form data submitted:', values);
+
+      // Save form data to localStorage
+      localStorage.setItem('userProfile', JSON.stringify(values));
+
+      // Show notification
+      setIsSaved(true);
+
+      // Notify parent component about changes
+      onProfileChange(values);
+
+      // Navigate to the links page after 1 seconds
+      setTimeout(() => {
+        navigate('/links');
+      }, 1000);
+    },
+  });
 
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
-      setFormData((prev) => ({ ...prev, profilePicture: reader.result }));
-      onProfileChange({ ...formData, profilePicture: reader.result });
+      formik.setFieldValue('profilePicture', reader.result);
+      onProfileChange({ ...formik.values, profilePicture: reader.result });
     };
     if (file) {
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form data submitted:', formData);
-
-    // Show notification
-    setIsSaved(true);
-
-    // Navigate to the links page after 2 seconds
-    setTimeout(() => {
-      navigate('/links');
-    }, 2000);
   };
 
   return (
@@ -51,14 +78,15 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
           <h1>Profile Details</h1>
           <p>Add your details to create a personal touch to your profile.</p>
         </div>
-        <form className="user-profile-form" onSubmit={handleSubmit}>
+        <form className="user-profile-form" onSubmit={formik.handleSubmit}>
+          {/* Profile Picture Section */}
           <div className="form-group profile-picture-section">
             <div className="profile-picture-container">
               <span className="prof-label">Profile Picture</span>
               <div className="prof-label-input">
                 <label htmlFor="profilePicture" className="profile-picture-label">
-                  {formData.profilePicture ? (
-                    <img src={formData.profilePicture} alt="Profile Preview" className="profile-picture" />
+                  {formik.values.profilePicture ? (
+                    <img src={formik.values.profilePicture} alt="Profile Preview" className="profile-picture" />
                   ) : (
                     <div className="profile-picture-placeholder">Change Image</div>
                   )}
@@ -71,6 +99,9 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
                   onChange={handleProfilePictureChange}
                   hidden
                 />
+                {formik.errors.profilePicture && formik.touched.profilePicture && (
+                  <div className="error-message">{formik.errors.profilePicture}</div>
+                )}
                 <p className="image-requirements">
                   Image must be below 1024x1024px. Use PNG, JPG, or BMP format.
                 </p>
@@ -78,6 +109,7 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
             </div>
           </div>
 
+          {/* Form Inputs */}
           <div className="form-inputs">
             <div className="form-group">
               <label htmlFor="firstName">First name*</label>
@@ -85,11 +117,16 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
                 type="text"
                 name="firstName"
                 id="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={formik.touched.firstName && formik.errors.firstName ? 'error' : ''}
                 required
               />
             </div>
+              {formik.touched.firstName && formik.errors.firstName ? (
+                <div className="error-message">{formik.errors.firstName}</div>
+              ) : null}
 
             <div className="form-group">
               <label htmlFor="lastName">Last name*</label>
@@ -97,23 +134,33 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
                 type="text"
                 name="lastName"
                 id="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={formik.touched.lastName && formik.errors.lastName ? 'error' : ''}
                 required
               />
             </div>
+              {formik.touched.lastName && formik.errors.lastName ? (
+                <div className="error-message">{formik.errors.lastName}</div>
+              ) : null}
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email*</label>
               <input
                 type="email"
                 name="email"
                 id="email"
-                value={formData.email}
-                onChange={handleInputChange}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={formik.touched.email && formik.errors.email ? 'error' : ''}
                 required
               />
             </div>
+              {formik.touched.email && formik.errors.email ? (
+                <p className="error-message">{formik.errors.email}</p>
+              ) : null}
           </div>
 
           <div className="save-button-container">
@@ -131,7 +178,7 @@ const UserProfileForm = ({ userProfile = {}, onProfileChange = () => {} }) => {
 
       {/* Live Preview Section */}
       <div className="live-preview-section">
-        <PreviewPage userProfile={formData} />
+        <PreviewPage userProfile={formik.values} />
       </div>
     </div>
   );

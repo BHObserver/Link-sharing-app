@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaGithub, FaYoutube, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa';
 import './PreviewPage.scss';
 
 const PreviewPage = ({ userProfile = {} }) => {
-  // Destructure with default values to avoid undefined errors
-  const { profilePicture = '', firstName = '', lastName = '', email = 'No Email Provided', links = [] } = userProfile;
+  const [profPic, setProfPic] = useState(userProfile.profilePicture || '');
+  const [name, setName] = useState(`${userProfile.firstName || ''} ${userProfile.lastName || ''}`);
+  const [emailData, setEmailData] = useState(userProfile.email || '');
+  const [links, setLinks] = useState(userProfile.links || []);
+
+  // Load data from localStorage if not provided by userProfile
+  useEffect(() => {
+    console.log("User Profile Data: ", userProfile); // Debugging line
+
+    // Load user data from localStorage
+    const storedProfile = JSON.parse(localStorage.getItem('userProfile'));
+
+    if (storedProfile) {
+      setProfPic(storedProfile.profilePicture || '');
+      setName(`${storedProfile.firstName || ''} ${storedProfile.lastName || ''}`);
+      setEmailData(storedProfile.email || '');
+      setLinks(storedProfile.links || []);
+    } else if (userProfile.links && userProfile.links.length > 0) {
+      setLinks(userProfile.links); // Populate with userProfile links if they exist
+    }
+  }, [userProfile]);
+
+  useEffect(() => {
+    console.log("User Profile Data: ", userProfile); // Debugging line
+    if (!userProfile.links || userProfile.links.length === 0) {
+      const savedLinks = localStorage.getItem('userLinks');
+      if (savedLinks) {
+        setLinks(JSON.parse(savedLinks));
+      }
+    } else {
+      setLinks(userProfile.links); // Populate with userProfile links if they exist
+    }
+  }, [userProfile]);
+
+  const { profilePicture = '', firstName = '', lastName = '', email = '', links: userLinks = [] } = userProfile;
 
   const getIconForPlatform = (platform) => {
     switch (platform?.toLowerCase()) {
@@ -45,20 +78,20 @@ const PreviewPage = ({ userProfile = {} }) => {
       <div className="profile-card">
         {/* Profile Section */}
         <div className='profile-image-container'>
-          {profilePicture ? (
+          {profPic ? (
             <img
-              src={profilePicture}
+              src={profPic}
               alt="Profile"
               className="profile-image"
             />
           ) : (
-            <div className="profile-image-placeholder">No Image</div>
+            <div className="profile-image-placeholder"></div>
           )}
         </div>
         
         <div className='profile-details'>
-          <h2 className="profile-name">{`${firstName} ${lastName}`}</h2>
-          <p className="profile-email">{email}</p>  
+          <h2 className="profile-name">{name}</h2>
+          <p className="profile-email">{emailData}</p>  
         </div>
 
         {/* Links Section */}
@@ -78,7 +111,7 @@ const PreviewPage = ({ userProfile = {} }) => {
             ))}
           </div>
         ) : (
-          <p className="no-links-message">No links added yet</p>
+          <p className="no-links-message">No links available</p>
         )}
       </div>
     </div>
