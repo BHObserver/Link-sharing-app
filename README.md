@@ -1,70 +1,139 @@
-# Getting Started with Create React App
+ <a name="readme-top"></a>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ <div align="center">
 
-## Available Scripts
+  <!-- LOGO -->
+   <img src="./src/assets/logo-head.png" alt="logo" width="140" height="auto" />
+   <br/>
 
-In the project directory, you can run:
+ // MAIN HEADING
+   <h3><b>Link Sharing App</b></h3>
 
-### `npm start`
+ </div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+ // TABLE OF CONTENTS
+ # 📗 Table of Contents
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+ - [📖 About the Project](#about-project)
+   - [🛠 Built With](#built-with)
+     - [Key Features](#key-features)
+ - [🚀 Live Demo](#live-demo)
+ - [💻 Getting Started](#getting-started)
+   - [Setup](#setup)
+   - [Prerequisites](#prerequisites)
+   - [Install](#install)
+   - [Usage](#usage)
+   - [Run Tests](#run-tests)
+   - [Deployment](#deployment)
+ - [👥 Authors](#authors)
+ - [🔭 Future Features](#future-features)
+ - [🤝 Contributing](#contributing)
+ - [⭐️ Show Your Support](#support)
+ - [🙏 Acknowledgements](#acknowledgements)
+ - [📝 License](#license)
 
-### `npm test`
+ // INTRO
+ # 📖 Link Sharing App <a name="about-project"></a>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ > devlinks is an intuitive link-sharing platform tailored for developers to curate and share their top resources, projects, and insights with the community. Built with React and SCSS, it offers users the ability to create profiles, add links, and view live previews on a mock phone interface. With a responsive design, it ensures a seamless experience across all devices. Additionally, features like local storage for data management allow users to effortlessly edit, update, and delete their links.
 
-### `npm run build`
+ ## 🛠 Built With <a name="built-with"></a>
+ - React
+ - SCSS
+ - JavaScript
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ // Features
+ ### Key Features <a name="key-features"></a>
+ 1. User profiles for a personalized experience
+ 2. Seamless link addition with live previews
+ 3. Fully responsive design for accessibility across devices
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ // LIVE DEMO
+ ### 🚀 Live Demo
 
-### `npm run eject`
+ > Experience the power of devlinks in action! Watch the [live demo](#) of the app or visit the app [page](#) to explore its features.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ // GETTING STARTED
+ ## 💻 Getting Started <a name="getting-started"></a>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+ > To get your own local copy of the project, follow these steps:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+ ```sh
+ git clone https://github.com/BHObserver/Link-sharing-app.git
+ cd link-sharing-app
+ ```
 
-## Learn More
+ ### Setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ Set up this project by running the following commands:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+ ```sh
+ npm install
+ npm start
+ ```
 
-### Code Splitting
+ ### Prerequisites
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+ Ensure you have the following installed:
+ 1. A code editor of your choice
+ 2. Git
+ 3. An internet browser
 
-### Analyzing the Bundle Size
+ ### Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+ To run the project, simply execute:
 
-### Making a Progressive Web App
+ ```sh
+ npm start
+ ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+ // AUTHORS
+ ## 👥 Authors <a name="authors"></a>
 
-### Advanced Configuration
+ 👤 **Burhan Uddin**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+ - GitHub: [@BHObserver](https://github.com/BHObserver)
+ - Twitter: [@BurhanU14173360](https://twitter.com/BurhanU14173360)
+ - LinkedIn: [bhobserver](https://www.linkedin.com/in/hans.dev)
 
-### Deployment
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+ ## 🔭 Future Features <a name="future-features"></a>
 
-### `npm run build` fails to minify
+ - [ ] **User Authentication**: Implement robust signup and signin features for enhanced security.
+ - [ ] **Database Integration**: Store user data in a database for persistent access and management.
+ - [ ] **Firebase Authentication**: Leverage Firebase for a secure and seamless user authentication experience.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+ // CONTRIBUTION
+ ## 🤝 Contributing <a name="contributing"></a>
+
+ Contributions are not just welcome; they are essential! If you have ideas for enhancements, bug fixes, or features, please don’t hesitate to reach out or submit a pull request.
+
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+ // SUPPORT
+ ## ⭐️ Show Your Support <a name="support"></a>
+
+ If you find value in this project, please show your support by giving it a star ⭐️⭐️⭐️⭐️⭐️
+
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+ // ACKNOWLEDGEMENTS
+ ## 🙏 Acknowledgments <a name="acknowledgements"></a>
+
+ This project was inspired by a challenge from Frontend Mentor. A heartfelt thank you to the creators and community for their invaluable resources and support!
+
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+ // LICENSE
+ ## 📝 License <a name="license"></a>
+
+ This project is licensed under the [MIT](./LICENSE) license.
+
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
