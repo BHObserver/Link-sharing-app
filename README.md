@@ -49,7 +49,7 @@
  
  ### 🚀 Live Demo
 
- > Experience the power of devlinks in action! Watch the [live demo]() of the app to explore its features.
+ > Experience the power of devlinks in action! Watch the [live demo](https://link-sharing-app-vyzz.onrender.com/) of the app to explore its features.
 
  <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
