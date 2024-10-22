@@ -3,73 +3,48 @@ import { FaGithub, FaYoutube, FaLinkedin, FaInstagram, FaTwitter } from 'react-i
 import './PreviewPage.scss';
 
 const PreviewPage = ({ userProfile = {} }) => {
-  const [profPic, setProfPic] = useState(userProfile.profilePicture || '');
-  const [name, setName] = useState(`${userProfile.firstName || ''} ${userProfile.lastName || ''}`);
-  const [emailData, setEmailData] = useState(userProfile.email || '');
-  const [links, setLinks] = useState(userProfile.links || []);
+  const [profPic, setProfPic] = useState('');
+  const [name, setName] = useState('');
+  const [emailData, setEmailData] = useState('');
+  const [links, setLinks] = useState([]);
 
-  // Load data from localStorage if not provided by userProfile
+  // Load data from localStorage and userProfile
   useEffect(() => {
-    console.log("User Profile Data: ", userProfile); // Debugging line
-
-    // Load user data from localStorage
     const storedProfile = JSON.parse(localStorage.getItem('userProfile'));
+    const savedLinks = JSON.parse(localStorage.getItem('userLinks')) || [];
 
     if (storedProfile) {
       setProfPic(storedProfile.profilePicture || '');
       setName(`${storedProfile.firstName || ''} ${storedProfile.lastName || ''}`);
       setEmailData(storedProfile.email || '');
-      setLinks(storedProfile.links || []);
-    } else if (userProfile.links && userProfile.links.length > 0) {
-      setLinks(userProfile.links); // Populate with userProfile links if they exist
-    }
-  }, [userProfile]);
-
-  useEffect(() => {
-    console.log("User Profile Data: ", userProfile); // Debugging line
-    if (!userProfile.links || userProfile.links.length === 0) {
-      const savedLinks = localStorage.getItem('userLinks');
-      if (savedLinks) {
-        setLinks(JSON.parse(savedLinks));
-      }
+      setLinks(storedProfile.links || savedLinks);
     } else {
-      setLinks(userProfile.links); // Populate with userProfile links if they exist
+      setLinks(userProfile.links || savedLinks);
+      setProfPic(userProfile.profilePicture || '');
+      setName(`${userProfile.firstName || ''} ${userProfile.lastName || ''}`);
+      setEmailData(userProfile.email || '');
     }
   }, [userProfile]);
-
-  const { profilePicture = '', firstName = '', lastName = '', email = '', links: userLinks = [] } = userProfile;
 
   const getIconForPlatform = (platform) => {
     switch (platform?.toLowerCase()) {
-      case 'github':
-        return <FaGithub />;
-      case 'youtube':
-        return <FaYoutube />;
-      case 'linkedin':
-        return <FaLinkedin />;
-      case 'instagram':
-        return <FaInstagram />;
-      case 'twitter':
-        return <FaTwitter />;
-      default:
-        return null;
+      case 'github': return <FaGithub />;
+      case 'youtube': return <FaYoutube />;
+      case 'linkedin': return <FaLinkedin />;
+      case 'instagram': return <FaInstagram />;
+      case 'twitter': return <FaTwitter />;
+      default: return null;
     }
   };
 
   const getClassNameForPlatform = (platform) => {
     switch (platform?.toLowerCase()) {
-      case 'github':
-        return 'link-item github';
-      case 'youtube':
-        return 'link-item youtube';
-      case 'linkedin':
-        return 'link-item linkedin';
-      case 'instagram':
-        return 'link-item instagram';
-      case 'twitter':
-        return 'link-item twitter';
-      default:
-        return 'link-item';
+      case 'github': return 'link-item github';
+      case 'youtube': return 'link-item youtube';
+      case 'linkedin': return 'link-item linkedin';
+      case 'instagram': return 'link-item instagram';
+      case 'twitter': return 'link-item twitter';
+      default: return 'link-item';
     }
   };
 
@@ -79,16 +54,12 @@ const PreviewPage = ({ userProfile = {} }) => {
         {/* Profile Section */}
         <div className='profile-image-container'>
           {profPic ? (
-            <img
-              src={profPic}
-              alt="Profile"
-              className="profile-image"
-            />
+            <img src={profPic} alt="Profile" className="profile-image" />
           ) : (
             <div className="profile-image-placeholder"></div>
           )}
         </div>
-        
+
         <div className='profile-details'>
           <h2 className="profile-name">{name}</h2>
           <p className="profile-email">{emailData}</p>  

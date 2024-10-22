@@ -206,3 +206,17 @@ p {
     width: 100%; /* Ensure buttons take full width on mobile */
   }
 }
+
+
+.notification {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  z-index: 1000;
+}

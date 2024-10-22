@@ -36,14 +36,13 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
   useEffect(() => {
     setCurrentLinks(links);
   }, [links]);
-  
+
   useEffect(() => {
     const savedLinks = localStorage.getItem('userLinks');
     if (savedLinks) {
       setCurrentLinks(JSON.parse(savedLinks));
     }
   }, []);
-
 
   const addLinkField = () => {
     const newLinks = [...currentLinks, { platform: '', url: '' }];
@@ -69,7 +68,6 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
   const handleSave = (values) => {
     console.log('Links saved:', values.links);
     localStorage.setItem('userLinks', JSON.stringify(values.links));
-    navigate('/preview');
   };
 
   return (
@@ -132,6 +130,8 @@ const LinksPage = ({ userProfile, links = [], onLinksChange = () => {} }) => {
                                 name={`links[${index}].url`}
                                 placeholder="https://example.com"
                                 className="url-input"
+                                value={values.links[index].url || ''}
+                                onChange={(e) => setFieldValue(`links[${index}].url`, e.target.value)}
                               />
                               <ErrorMessage name={`links[${index}].url`} component="div" className="error-message" />
                             </div>
